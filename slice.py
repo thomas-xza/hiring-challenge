@@ -18,14 +18,17 @@ def main():
     
     print(csv_loaded.head(5).tail(1))
 
+    new_contacts = organise_new_contacts_data(mocks)
+
     # initialise_tables("monolith.db")
 
 
-def organise_new_contacts_data(entities: pd.DataFrame, contacts):
+def organise_new_contacts_data(contacts: list[dict[str, dict[str, str]]]) -> list[dict[str, dict[str, str]]]:
 
-    ##  Takes set of new contact data, 
+    ##  Takes set of new contact data, merges data sources where
+    ##  possible, scores.
 
-    pass
+    
     
     
 def compliance_check_new_contacts(
