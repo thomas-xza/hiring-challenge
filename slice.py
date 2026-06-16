@@ -21,22 +21,35 @@ def main():
     # initialise_tables("monolith.db")
 
 
+def organise_new_contacts_data(entities: pd.DataFrame, contacts):
+
+    ##  Takes set of new contact data, 
+
+    pass
+    
+    
+def compliance_check_new_contacts(
+        new_contacts: list[dict[str, dict[str, str]]]) -> list[dict[str, dict[str, str]]]:
+
+    ##  Check new contact data for compliance before storing to
+    ##  database. Filters out non-compliant contacts.
+
+    
+def calculate_initial_confidence_value(contact_record: dict[str, dict[str, str]]) -> int:
+
+    pass
+
+
 def select_target_contact(
         db_records: list[dict[str, dict[str, str]]]) -> dict[str, dict[str, str]]:
 
     ##  Takes a set of potential contacts, extracts best candidate.
 
-    pass
-
-
-def compliance_check_new_contacts(
-        new_contacts: list[dict[str, dict[str, str]]]) -> list[dict[str, dict[str, str]]]:
-
-    ##  Check new contact data for compliance before storing to
-    ##  database. Filter out non-compliant contacts.
-
-    
-def calculate_initial_confidence_value(contact_record: dict[str, dict[str, str]]) -> int:
+    ##  This is a more a function for contacts after they have been
+    ##  organised from the various sources and written to the
+    ##  database, and then read from, which is beyond the scope of
+    ##  this challenge. Also it is not particularly complex, just
+    ##  order by role.
 
     pass
 
