@@ -86,10 +86,12 @@ class Test_implementation(unittest.TestCase):
 
     def test_merge_contacts_1(self):
 
+        contacts = sl.adjust_source_data_structure(self.mocks["Sunbelt Roofing Co"])
+
         self.assertEqual(
             sl.merge_contacts(
-                self.mocks["Sunbelt Roofing Co"]["listing"],
-                self.mocks["Sunbelt Roofing Co"]["enrichment"],
+                contacts["listing"],
+                contacts["enrichment"],
                 5
             ),
             {'name': None, 'phone': '+1-480-555-0133', 'email': 'office@sunbeltroofingaz.com', 'confidence': 75, 'sources': ['mock://listing/sunbelt-roofing', 'mock://enrichment/sunbelt-roofing']}
@@ -97,10 +99,12 @@ class Test_implementation(unittest.TestCase):
 
     def test_merge_contacts_2(self):
 
+        contacts = sl.adjust_source_data_structure(self.mocks["Cedar Ridge Plumbing LLC"])
+
         self.assertEqual(
             sl.merge_contacts(
-                self.mocks["Cedar Ridge Plumbing LLC"]["registry"],
-                self.mocks["Cedar Ridge Plumbing LLC"]["listing"],
+                contacts["registry"],
+                contacts["listing"],
                 5
             ),
             {'name': 'Daniel Ortega', 'role': 'Owner', 'phone': '+1-402-555-0148', 'confidence': 75, 'sources': ['mock://registry/ne/cedar-ridge-plumbing', 'mock://listing/cedar-ridge-plumbing']}
@@ -108,16 +112,26 @@ class Test_implementation(unittest.TestCase):
         
     def test_merge_contacts_3(self):
 
+        contacts = sl.adjust_source_data_structure(self.mocks["Pioneer Landscaping Inc"])
+
+        print(sl.merge_contacts(
+                contacts["listing"],
+                contacts["enrichment"],
+                5
+            ))
+        
         self.assertEqual(
             sl.merge_contacts(
-                self.mocks["Cedar Ridge Plumbing LLC"]["registry"],
-                self.mocks["Cedar Ridge Plumbing LLC"]["listing"],
+                contacts["listing"],
+                contacts["enrichment"],
                 5
             ),
-            {'name': 'Daniel Ortega', 'role': 'Owner', 'phone': '+1-402-555-0148', 'confidence': 75, 'sources': ['mock://registry/ne/cedar-ridge-plumbing', 'mock://listing/cedar-ridge-plumbing']}
+            {'name': 'Maria Gomez', 'phone': '+1-208-555-0175', 'sources': ['mock://listing/pioneer-landscaping', 'mock://enrichment/pioneer-landscaping'], 'email': 'maria@pioneerlandscaping.com', 'confidence': 75}
         )
 
     def test_merge_new_contact_data_1(self):
+
+        contacts = sl.adjust_source_data_structure(self.mocks["Cedar Ridge Plumbing LLC"])
 
         # print(sl.merge_new_contact_data(
         #         self.mocks["Cedar Ridge Plumbing LLC"]
@@ -125,13 +139,15 @@ class Test_implementation(unittest.TestCase):
 
         self.assertEqual(
             len(sl.merge_new_contact_data(
-                self.mocks["Cedar Ridge Plumbing LLC"]
+                contacts
             )), 2
         )
         
 
     def test_merge_new_contact_data_2(self):
 
+        contacts = sl.adjust_source_data_structure(self.mocks["Pioneer Landscaping Inc"])
+        
         self.assertEqual(
             len(sl.merge_new_contact_data(
                 self.mocks["Pioneer Landscaping Inc"]
@@ -146,6 +162,8 @@ class Test_implementation(unittest.TestCase):
         #     ))
 
         # print(self.mocks.popitem())
+
+        contacts = sl.adjust_source_data_structure(self.mocks["Pioneer Landscaping Inc"])
 
         self.assertEqual(
             len(sl.merge_maximally(

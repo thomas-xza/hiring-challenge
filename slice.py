@@ -21,27 +21,57 @@ def main():
 
     contacts_merged = {}
 
-    for business in resp_res:
 
-        merge_res = true
+def merge_maximally(
+        multi_business_contacts_set: dict[str, list[dict[str, dict[str, str]]]]
+        ) -> dict[str, list[dict[str, dict[str, str]]]]:
+
+    new_multi_business_contacts_set = {}
+
+    for business, contacts in multi_business_contacts_set.items():
+
+        merge_res = True
+
+        contacts_new = adjust_source_data_structure(dict(contacts))
 
         while merge_res == True:
 
-            contacts, merge_res = merge_new_contact_data(contacts)
+            contacts_new, merge_res = merge_new_contact_data(contacts_new)
 
-        contacts_merged[business] = contacts
+        new_multi_business_contacts_set[business] = contacts_new
+
+    return new_multi_business_contacts_set
+
+
+def adjust_source_data_structure(contacts: list[dict[str, dict[str, str]]]) -> list[dict[str, dict[str, str]]]:
+
+    contacts_new = dict(contacts)
+    
+    for k, v in contacts.items():
+
+        contacts_new[k]["sources"] = [contacts[k]["source_url"]]
+
+        contacts_new[k].pop("source_url", None)
+
+    return contacts_new
 
 
 def merge_new_contact_data(contacts: list[dict[str, dict[str, str]]]) -> list[dict[str, dict[str, str]]]:
 
     ##  Takes set of new contact data for 1 business, merges data
-    ##  sources where possible, scores.
+    ##  providers where possible, scores.
 
-    for i, c in enumerate(contacts):
+    for i, provider_1 in enumerate(contacts):
 
-      for j, c2 in enumerate(contacts):
+      for j, provider_2 in enumerate(contacts):
+
+        c = contacts[provider_1]
+
+        c2 = contacts[provider_2]
 
         if i != j:
+
+ #          print(c, c2)
 
           merge_plan = [names_compare(c, c2),
                         phones_compare(c, c2),
@@ -51,17 +81,17 @@ def merge_new_contact_data(contacts: list[dict[str, dict[str, str]]]) -> list[di
 
             confidence = sum(merge_plan) * 5
 
-            new_contact = merge_two_contacts(c, c2, confidence)
+            new_contact = merge_contacts(c, c2, confidence)
 
-            new_contact_set = []
+            new_contact_set = {}
 
-            for k, c in enumerate(contacts):
+            for _, provider_3 in enumerate(contacts):
 
-                if k != i and k != j:
+                if provider_3 != provider_1 and provider_3 != provider_2:
 
-                    new_contact_set = new_contact_set + [contact]
+                    new_contact_set[provider_3] = contacts[provider_3]
 
-            new_contact_set = [new_contact] + new_contact_set
+            new_contact_set[f"{provider_1}-{provider_2}"] = new_contact
 
             return new_contact_set, True
 
@@ -80,13 +110,23 @@ def merge_contacts(c1: dict[str, str], c2: dict[str, str], conf: int) -> dict[st
 
     if "confidence" not in c_new.keys():
 
-        c_new["confidence"] = conf
+        c_new["confidence"] = 70 + conf
 
     else:
 
         c_new["confidence"] += conf
 
-    return c1
+    for source in c2["sources"]:
+
+        if source not in c_new["sources"]:
+
+            c_new["sources"] = c_new["sources"] + [source]
+
+    c_new.pop("provider_confidence", None)
+
+    c_new.pop("source_url", None)
+
+    return c_new
 
 
 def extract_data(c: dict[str, str], attr) -> str:
