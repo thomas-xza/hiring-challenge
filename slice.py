@@ -49,6 +49,8 @@ def adjust_source_data_structure(contacts: list[dict[str, dict[str, str]]]) -> l
     
     for k, v in contacts.items():
 
+        # print(contacts[k])
+
         contacts_new[k]["sources"] = [contacts[k]["source_url"]]
 
         contacts_new[k].pop("source_url", None)

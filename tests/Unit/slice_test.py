@@ -114,11 +114,11 @@ class Test_implementation(unittest.TestCase):
 
         contacts = sl.adjust_source_data_structure(self.mocks["Pioneer Landscaping Inc"])
 
-        print(sl.merge_contacts(
-                contacts["listing"],
-                contacts["enrichment"],
-                5
-            ))
+        # print(sl.merge_contacts(
+        #         contacts["listing"],
+        #         contacts["enrichment"],
+        #         5
+        #     ))
         
         self.assertEqual(
             sl.merge_contacts(
@@ -157,19 +157,39 @@ class Test_implementation(unittest.TestCase):
         
     def test_merge_maximally_1(self):
 
-        # print(sl.merge_new_contact_data(
-        #         self.mocks["Cedar Ridge Plumbing LLC"]
-        #     ))
+        merge_max_res = sl.merge_maximally(
+                self.mocks
+            )
+        
+        self.assertEqual(
+            len(merge_max_res["Pioneer Landscaping Inc"]), 1
+        )
+        
+    def test_merge_maximally_2(self):
 
-        # print(self.mocks.popitem())
+        merge_max_res = sl.merge_maximally(
+                self.mocks
+            )
 
-        contacts = sl.adjust_source_data_structure(self.mocks["Pioneer Landscaping Inc"])
+        print(merge_max_res)
 
         self.assertEqual(
-            len(sl.merge_maximally(
+            len(merge_max_res["Brookside Veterinary Clinic"]), 1
+        )
+        
+        self.assertEqual(
+            len(merge_max_res["Ironclad Welding Shop"]), 2
+        )
+        
+       
+    def test_merge_maximally_3(self):
+
+        merge_max_res = sl.merge_maximally(
                 self.mocks
-                )["Pioneer Landscaping Inc"])
-                , 1
+            )
+
+        self.assertEqual(
+            len(merge_max_res["Coastal Breeze Pool Service"]), 2
         )
         
         
