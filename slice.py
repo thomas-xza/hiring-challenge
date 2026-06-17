@@ -110,8 +110,6 @@ def names_compare(c1: dict[str, str], c2: dict[str, str]) -> int:
 
         n1, n2 = n1.lower().replace('.', ''), n2.lower().replace('.', '')
 
-
-
     if n1 == n2:
         
       return 1
@@ -159,8 +157,6 @@ def name_email_compare(c1: dict[str, str], c2: dict[str, str]) -> int:
 
     n1cc_initials = [word[0] for word in n1cc]
 
-    print(n1cc, n1cc_initials)
-
     for comp in n1cc:
 
         if len(comp) > 1 and comp in e1:
@@ -180,7 +176,7 @@ def name_email_compare(c1: dict[str, str], c2: dict[str, str]) -> int:
     return -1
 
 
-def extract_name_core_components(n: str) -> str:
+def extract_name_core_components(n: str) -> tuple[str]:
 
     titles = r"^(?:mrs|ms|mr|dr|prof|mx)\.?\s+"
 
@@ -195,7 +191,24 @@ def extract_name_core_components(n: str) -> str:
 
     return (n_final_no_whitespace[0], n_final_no_whitespace[-1])
 
-    
+
+def phones_compare(c1: dict[str, str], c2: dict[str, str]) -> int:
+
+    p1, p2 = extract_data(c1, "phone"), extract_data(c2, "phone")
+
+    if p1 is None or p2 is None:
+
+      return 0
+
+    else:
+
+        p1, p2 = p1.lower().replace('.', ''), p2.lower().replace('.', '')
+
+    if p1 == p2:
+        
+      return 1
+
+  
 def compliance_check_new_contacts(
         new_contacts: list[dict[str, dict[str, str]]]) -> list[dict[str, dict[str, str]]]:
 

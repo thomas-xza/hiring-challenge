@@ -70,5 +70,19 @@ class Test_implementation(unittest.TestCase):
                 self.mocks["Ironclad Welding Shop"]["listing"]
             ), 0)
         
+    def test_phones_match_1(self):
+        self.assertEqual(
+            sl.phones_compare(
+                self.mocks["Sunbelt Roofing Co"]["listing"],
+                self.mocks["Sunbelt Roofing Co"]["enrichment"]
+            ), 1)
+        
+    def test_phones_match_2(self):
+        self.assertEqual(
+            sl.phones_compare(
+                self.mocks["Bayview Auto Repair"]["registry"],
+                self.mocks["Bayview Auto Repair"]["enrichment"]
+            ), 0)
+        
 if __name__ == '__main__':
     unittest.main()
