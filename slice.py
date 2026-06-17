@@ -15,12 +15,54 @@ def main():
     with open('challenge/mocks/enrichment_responses.json', 'r', encoding='utf-8') as file:
         mocks = json.load(file)
     
-    print(csv_loaded.head(5).tail(1))
-
     # initialise_tables("monolith.db")
 
-    contacts_merged = {}
+    contacts_merged = merge_maximally(mocks)
 
+    business_phone_or_email, needs_human_review = get_business_contact(contacts_merged["Ironclad Welding Shop"])
+
+    print(f"Business phone or email: {business_phone_or_email}")
+
+    business_phone_or_email, needs_human_review = get_business_contact(contacts_merged["Greenfield Catering Group"])
+
+    print(f"Business phone or email: {business_phone_or_email}")
+
+
+def get_business_contact(
+        contacts: list[dict[str, dict[str, str]]]
+        ) -> tuple[str, bool]:
+
+    role_preference = (
+            ("ap manager", "accounts payable"),
+            ("owner", "founder"),
+            ("cfo", "finance lead"),
+            ("office manager", "manager")
+            )
+
+    for role_target in role_preference:
+
+      for _, contact in contacts.items():
+
+        role = extract_data(contact, "role")
+
+        confidence = extract_data(contact, "confidence")
+        
+        email = extract_data(contact, "email")
+
+        phone = extract_data(contact, "phone")
+        
+        if role is not None and role.lower() in role_target and confidence is not None and confidence >= 70:
+
+            if email is not None:
+
+                return email, False
+
+            if phone is not None:
+
+                return phone, False
+
+    return "", True
+    
 
 def merge_maximally(
         multi_business_contacts_set: dict[str, list[dict[str, dict[str, str]]]]
@@ -112,7 +154,7 @@ def merge_contacts(c1: dict[str, str], c2: dict[str, str], conf: int) -> dict[st
 
     if "confidence" not in c_new.keys():
 
-        c_new["confidence"] = 70 + conf
+        c_new["confidence"] = 65 + conf
 
     else:
 
