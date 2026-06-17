@@ -302,25 +302,6 @@ def compliance_check_new_contacts(
     pass
 
     
-def calculate_initial_confidence_value(contact_record: dict[str, dict[str, str]]) -> int:
-
-    pass
-
-
-def select_target_contact(
-        db_records: list[dict[str, dict[str, str]]]) -> dict[str, dict[str, str]]:
-
-    ##  Takes a set of potential contacts, extracts best candidate.
-
-    ##  This is a more a function for contacts after they have been
-    ##  organised from the various sources and written to the
-    ##  database, and then read from, which is beyond the scope of
-    ##  this challenge. Also it is not particularly complex, just
-    ##  order by role.
-
-    pass
-
-
 if __name__ == "__main__":
 
     main()
