@@ -83,6 +83,77 @@ class Test_implementation(unittest.TestCase):
                 self.mocks["Bayview Auto Repair"]["registry"],
                 self.mocks["Bayview Auto Repair"]["enrichment"]
             ), 0)
+
+    def test_merge_contacts_1(self):
+
+        self.assertEqual(
+            sl.merge_contacts(
+                self.mocks["Sunbelt Roofing Co"]["listing"],
+                self.mocks["Sunbelt Roofing Co"]["enrichment"],
+                5
+            ),
+            {'name': None, 'phone': '+1-480-555-0133', 'email': 'office@sunbeltroofingaz.com', 'confidence': 75, 'sources': ['mock://listing/sunbelt-roofing', 'mock://enrichment/sunbelt-roofing']}
+        )
+
+    def test_merge_contacts_2(self):
+
+        self.assertEqual(
+            sl.merge_contacts(
+                self.mocks["Cedar Ridge Plumbing LLC"]["registry"],
+                self.mocks["Cedar Ridge Plumbing LLC"]["listing"],
+                5
+            ),
+            {'name': 'Daniel Ortega', 'role': 'Owner', 'phone': '+1-402-555-0148', 'confidence': 75, 'sources': ['mock://registry/ne/cedar-ridge-plumbing', 'mock://listing/cedar-ridge-plumbing']}
+        )
+        
+    def test_merge_contacts_3(self):
+
+        self.assertEqual(
+            sl.merge_contacts(
+                self.mocks["Cedar Ridge Plumbing LLC"]["registry"],
+                self.mocks["Cedar Ridge Plumbing LLC"]["listing"],
+                5
+            ),
+            {'name': 'Daniel Ortega', 'role': 'Owner', 'phone': '+1-402-555-0148', 'confidence': 75, 'sources': ['mock://registry/ne/cedar-ridge-plumbing', 'mock://listing/cedar-ridge-plumbing']}
+        )
+
+    def test_merge_new_contact_data_1(self):
+
+        # print(sl.merge_new_contact_data(
+        #         self.mocks["Cedar Ridge Plumbing LLC"]
+        #     ))
+
+        self.assertEqual(
+            len(sl.merge_new_contact_data(
+                self.mocks["Cedar Ridge Plumbing LLC"]
+            )), 2
+        )
+        
+
+    def test_merge_new_contact_data_2(self):
+
+        self.assertEqual(
+            len(sl.merge_new_contact_data(
+                self.mocks["Pioneer Landscaping Inc"]
+            )), 2
+        )
+
+        
+    def test_merge_maximally_1(self):
+
+        # print(sl.merge_new_contact_data(
+        #         self.mocks["Cedar Ridge Plumbing LLC"]
+        #     ))
+
+        # print(self.mocks.popitem())
+
+        self.assertEqual(
+            len(sl.merge_maximally(
+                self.mocks
+                )["Pioneer Landscaping Inc"])
+                , 1
+        )
+        
         
 if __name__ == '__main__':
     unittest.main()
