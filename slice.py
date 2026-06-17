@@ -5,7 +5,7 @@ import re
 
 import pandas as pd
 
-import implementation_db_calls as db_calls
+import slice_db_calls as db_calls
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
 
         merge_res = true
 
-        while merge_res = True:
+        while merge_res == True:
 
             contacts, merge_res = merge_new_contact_data(contacts)
 
@@ -95,16 +95,22 @@ def extract_data(c: dict[str, str], attr) -> str:
 
         return c[attr]
 
-    return null
+    return None
         
 
 def names_compare(c1: dict[str, str], c2: dict[str, str]) -> int:
 
-    n1, n2 = extract_data(c1, "name").lower(), extract_data(c2, "name").lower()
+    n1, n2 = extract_data(c1, "name"), extract_data(c2, "name")
 
-    if n1 == null or n2 == null
+    if n1 is None or n2 is None:
 
       return 0
+
+    else:
+
+        n1, n2 = n1.lower().replace('.', ''), n2.lower().replace('.', '')
+
+
 
     if n1 == n2:
         
@@ -137,23 +143,23 @@ def names_compare(c1: dict[str, str], c2: dict[str, str]) -> int:
 
 def name_email_compare(c1: dict[str, str], c2: dict[str, str]) -> int:
 
-    n1 = extract_data(c1, "name").lower()
-
-    e1 = extract_data(c2, "email").lower().split('@')[0]
+    n1, e1 = extract_data(c1, "name"), extract_data(c2, "email")
     
-    if n1 == null or e1 == null
+    if n1 is None or e1 is None:
 
       return 0
 
-    if n1 == n2:
-        
-      return 1
+    else:
+
+        n1, e1 = n1.lower(), e1.lower().split('@')[0]
 
     n1cc = extract_name_core_components(n1)
 
     matches = 0
 
     n1cc_initials = [word[0] for word in n1cc]
+
+    print(n1cc, n1cc_initials)
 
     for comp in n1cc:
 
